@@ -14,13 +14,28 @@
 
 import UIKit
 import FirebaseAnalytics
+import CmpSdk
 
 class AnalyticsViewController: UIViewController {
   private lazy var analyticsView = AnalyticsView(frame: view.frame)
+  private var cmpConsentTool: CMPConsentTool?
 
   override func viewDidLoad() {
     super.viewDidLoad()
     configureNavigationBar()
+
+    let cmpConfig : CmpConfig = CmpConfig.init()
+    CmpConfig.setValues("delivery.consentmanager.net", addCodeId: "xxxxx", addAppName: "DemoAppTM", addLanguage: "EN") //replace these configuration variables with your own CMP information
+    cmpConsentTool = CMPConsentTool(cmpConfig: cmpConfig, viewController: self)
+    cmpConsentTool!.openView()
+      
+      if(cmpConsentTool!.hasVendorConsent("s26"))
+      {
+          print("test_001")
+      }else{
+          print("test_002")
+      }
+
     view.addSubview(analyticsView)
     analyticsView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
